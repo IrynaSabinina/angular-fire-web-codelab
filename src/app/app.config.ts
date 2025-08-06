@@ -22,21 +22,24 @@ export const appConfig: ApplicationConfig = {
     // Firebase Initialization
     provideFirebaseApp(() => initializeApp(environment.firebase)),
 
+    // 🔐 App Check (with debug support via globalThis.FIREBASE_APPCHECK_DEBUG_TOKEN)
+    provideAppCheck(() => {
+      const appCheck = initializeAppCheck(getApp(), {
+        provider: new ReCaptchaEnterpriseProvider(
+          environment.reCAPTCHAEnterpriseKey.key
+        ),
+        isTokenAutoRefreshEnabled: true,
+      });
+      if (location.hostname === 'localhost') {
+        self.FIREBASE_APPCHECK_DEBUG_TOKEN = true;
+      }
+      return appCheck;
+    }),
     // Firebase Modules
     provideAuth(() => getAuth()),
     provideFirestore(() => getFirestore()),
     provideFunctions(() => getFunctions()),
     provideStorage(() => getStorage()),
     provideMessaging(() => getMessaging()),
-
-    // 🔐 App Check (with debug support via globalThis.FIREBASE_APPCHECK_DEBUG_TOKEN)
-    provideAppCheck(() =>
-      initializeAppCheck(getApp(), {
-        provider: new ReCaptchaEnterpriseProvider(
-          '6LdBqZwrAAAAALvjyGYyKlheUgRcwlnLvaQz5pQs'
-        ), // or use ReCaptchaV3Provider
-        isTokenAutoRefreshEnabled: true,
-      })
-    ),
   ],
 };
