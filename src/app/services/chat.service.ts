@@ -50,7 +50,7 @@ import { Router } from '@angular/router';
 type ChatMessage = {
   name: string | null;
   profilePicUrl: string | null;
-  timestamp: FieldValue;
+  timestamp: Date | FieldValue;
   uid: string | null;
   text?: string;
   imageUrl?: string;
@@ -127,7 +127,7 @@ export class ChatService {
     const message: ChatMessage = {
       name: this.currentUser.displayName,
       profilePicUrl: this.currentUser.photoURL,
-      timestamp: serverTimestamp(),
+      timestamp: new Date(),
       uid: this.currentUser?.uid,
     };
 

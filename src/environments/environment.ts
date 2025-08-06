@@ -8,4 +8,7 @@ export const environment = {
     appId: '1:589052657500:web:20d1f5c402c93b4c710b99',
     measurementId: 'G-58SS941BB0',
   },
+  reCAPTCHAEnterpriseKey: {
+    key: '6LdBqZwrAAAAALvjyGYyKlheUgRcwlnLvaQz5pQs',
+  },
 };
