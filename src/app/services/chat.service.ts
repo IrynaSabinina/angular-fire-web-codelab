@@ -82,7 +82,9 @@ export class ChatService {
   // Login Friendly Chat.
   // Signs-in Friendly Chat.
   login() {
+    console.log('1');
     signInWithPopup(this.auth, this.provider).then((result) => {
+      console.log('2');
       const credential = GoogleAuthProvider.credentialFromResult(result);
       this.router.navigate(['/', 'chat']);
       return credential;
@@ -101,11 +103,48 @@ export class ChatService {
       });
   }
 
+  //Todo3 Adds a text or image message to Cloud Firestore.
   // Adds a text or image message to Cloud Firestore.
   addMessage = async (
     textMessage: string | null,
     imageUrl: string | null
-  ): Promise<void | DocumentReference<DocumentData>> => {};
+  ): Promise<void | DocumentReference<DocumentData>> => {
+    // ignore empty messages
+    if (!textMessage && !imageUrl) {
+      console.log(
+        'addMessage was called without a message',
+        textMessage,
+        imageUrl
+      );
+      return;
+    }
+
+    if (this.currentUser === null) {
+      console.log('addMessage requires a signed-in user');
+      return;
+    }
+
+    const message: ChatMessage = {
+      name: this.currentUser.displayName,
+      profilePicUrl: this.currentUser.photoURL,
+      timestamp: serverTimestamp(),
+      uid: this.currentUser?.uid,
+    };
+
+    textMessage && (message.text = textMessage);
+    imageUrl && (message.imageUrl = imageUrl);
+
+    try {
+      const newMessageRef = await addDoc(
+        collection(this.firestore, 'messages'),
+        message
+      );
+      return newMessageRef;
+    } catch (error) {
+      console.error('Error writing new message to Firebase Database', error);
+      return;
+    }
+  };
 
   // Saves a new message to Cloud Firestore.
   saveTextMessage = async (messageText: string) => {
