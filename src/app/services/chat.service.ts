@@ -38,6 +38,7 @@ import {
   DocumentData,
   FieldValue,
 } from '@angular/fire/firestore';
+import { AppCheck } from '@angular/fire/app-check';
 import {
   Storage,
   getDownloadURL,
@@ -60,6 +61,7 @@ type ChatMessage = {
   providedIn: 'root',
 })
 export class ChatService {
+  appCheck: AppCheck = inject(AppCheck);
   firestore: Firestore = inject(Firestore);
   auth: Auth = inject(Auth);
   storage: Storage = inject(Storage);
