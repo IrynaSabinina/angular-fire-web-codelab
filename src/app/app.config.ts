@@ -19,23 +19,23 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
 
-    // Firebase Initialization
+    // 1. Initialize Firebase App
     provideFirebaseApp(() => initializeApp(environment.firebase)),
 
-    // 🔐 App Check (with debug support via globalThis.FIREBASE_APPCHECK_DEBUG_TOKEN)
+    // 2. Initialize App Check immediately after Firebase
     provideAppCheck(() => {
-      const appCheck = initializeAppCheck(getApp(), {
+      if (location.hostname === 'localhost') {
+        self.FIREBASE_APPCHECK_DEBUG_TOKEN = true;
+      }
+      return initializeAppCheck(getApp(), {
         provider: new ReCaptchaEnterpriseProvider(
           environment.reCAPTCHAEnterpriseKey.key
         ),
         isTokenAutoRefreshEnabled: true,
       });
-      if (location.hostname === 'localhost') {
-        self.FIREBASE_APPCHECK_DEBUG_TOKEN = true;
-      }
-      return appCheck;
     }),
-    // Firebase Modules
+
+    // 3. Other Firebase Modules
     provideAuth(() => getAuth()),
     provideFirestore(() => getFirestore()),
     provideFunctions(() => getFunctions()),
