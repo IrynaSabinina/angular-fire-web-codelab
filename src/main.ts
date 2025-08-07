@@ -6,8 +6,6 @@ declare global {
   var FIREBASE_APPCHECK_DEBUG_TOKEN: boolean;
 }
 
-globalThis.FIREBASE_APPCHECK_DEBUG_TOKEN = true;
-
 bootstrapApplication(AppComponent, appConfig).catch((err) =>
   console.error(err)
 );

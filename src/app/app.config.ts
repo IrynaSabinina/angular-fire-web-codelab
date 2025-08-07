@@ -24,9 +24,9 @@ export const appConfig: ApplicationConfig = {
 
     // 2. Initialize App Check immediately after Firebase
     provideAppCheck(() => {
-      if (location.hostname === 'localhost') {
-        self.FIREBASE_APPCHECK_DEBUG_TOKEN = true;
-      }
+      // if (location.hostname === 'localhost') {
+      //   self.FIREBASE_APPCHECK_DEBUG_TOKEN = true;
+      // }
       return initializeAppCheck(getApp(), {
         provider: new ReCaptchaEnterpriseProvider(
           environment.reCAPTCHAEnterpriseKey.key
